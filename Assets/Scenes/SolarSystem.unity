@@ -309,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03716d98937592144bb552af35c92e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_secondsToFocusOnPlanet: 1
   m_panSpeedCoefficient: 0.35
   m_zoomSpeedCoefficient: 150
   m_minCameraYZoom: 50
