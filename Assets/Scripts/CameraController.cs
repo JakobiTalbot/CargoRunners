@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
-    private float m_secondsToFocusOnPlanet = 2f;
+    private float m_secondsForLerpToPlanetFocus = 1f;
 
     [Header("Pan")]
     [SerializeField]
@@ -27,6 +27,8 @@ public class CameraController : MonoBehaviour
     private Vector3 m_lastPos;
     private Vector3 m_panDiff;
     private Vector3 m_zoomDiff;
+    private Vector3 m_positionBeforeFocus;
+    private Quaternion m_rotationBeforeFocus;
     private bool m_bCanMoveCamera = true;
 
     void Awake()
@@ -68,7 +70,13 @@ public class CameraController : MonoBehaviour
                 Planet p;
                 if (p = hit.collider.GetComponent<Planet>())
                 {
-                    StartCoroutine(FocusOnPlanet(p.GetFocusAngle()));
+                    // store position and rotation to return to after leaving planet focus
+                    m_positionBeforeFocus = m_transform.position;
+                    m_rotationBeforeFocus = m_transform.rotation;
+
+                    DisableCameraMovement();
+                    Transform angle = p.GetFocusAngle();
+                    StartCoroutine(LerpCamera(angle.position, angle.rotation, m_secondsForLerpToPlanetFocus));
                 }
             }
         }
@@ -86,28 +94,33 @@ public class CameraController : MonoBehaviour
         {
             m_zoomDiff += m_transform.forward * Input.mouseScrollDelta.y * m_zoomSpeedCoefficient * Time.deltaTime;
         }
+
+        // return to original position from planet focus
+        if (!m_bCanMoveCamera && Input.GetKeyDown(KeyCode.Escape))
+        {
+            StartCoroutine(LerpCamera(m_positionBeforeFocus, m_rotationBeforeFocus, m_secondsForLerpToPlanetFocus));
+            Invoke("EnableCameraMovement", m_secondsForLerpToPlanetFocus);
+        }
     }
 
-    private IEnumerator FocusOnPlanet(Transform focusAngle)
+    private IEnumerator LerpCamera(Vector3 targetPos, Quaternion targetRot, float seconds)
     {
-        DisableCameraMovement();
-
         float lerp = 0f;
         Vector3 startPos = m_transform.position;
         Quaternion startRot = m_transform.rotation;
 
         while (lerp < 1f)
         {
-            lerp += Time.deltaTime / m_secondsToFocusOnPlanet;
+            lerp += Time.deltaTime / seconds;
 
-            m_transform.position = Vector3.Lerp(startPos, focusAngle.position, lerp);
-            m_transform.rotation = Quaternion.Lerp(startRot, focusAngle.rotation, lerp);
+            m_transform.position = Vector3.Lerp(startPos, targetPos, lerp);
+            m_transform.rotation = Quaternion.Lerp(startRot, targetRot, lerp);
 
             yield return null;
         }
 
-        m_transform.position = focusAngle.position;
-        m_transform.rotation = focusAngle.rotation;
+        m_transform.position = targetPos;
+        m_transform.rotation = targetRot;
     }
 
     public void DisableCameraMovement()
