@@ -61,22 +61,25 @@ public class CameraController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            m_lastPos = Input.mousePosition;
-            m_zoomDiff = Vector3.zero;
-
-            RaycastHit hit;
-            if (Physics.Raycast(m_camera.ScreenPointToRay(Input.mousePosition), out hit))
+            if (m_bCanMoveCamera)
             {
-                Planet p;
-                if (p = hit.collider.GetComponent<Planet>())
-                {
-                    // store position and rotation to return to after leaving planet focus
-                    m_positionBeforeFocus = m_transform.position;
-                    m_rotationBeforeFocus = m_transform.rotation;
+                m_lastPos = Input.mousePosition;
+                m_zoomDiff = Vector3.zero;
 
-                    DisableCameraMovement();
-                    Transform angle = p.GetFocusAngle();
-                    StartCoroutine(LerpCamera(angle.position, angle.rotation, m_secondsForLerpToPlanetFocus));
+                RaycastHit hit;
+                if (Physics.Raycast(m_camera.ScreenPointToRay(Input.mousePosition), out hit))
+                {
+                    Planet p;
+                    if (p = hit.collider.GetComponent<Planet>())
+                    {
+                        // store position and rotation to return to after leaving planet focus
+                        m_positionBeforeFocus = m_transform.position;
+                        m_rotationBeforeFocus = m_transform.rotation;
+
+                        DisableCameraMovement();
+                        Transform angle = p.GetFocusAngle();
+                        StartCoroutine(LerpCamera(angle.position, angle.rotation, m_secondsForLerpToPlanetFocus));
+                    }
                 }
             }
         }
