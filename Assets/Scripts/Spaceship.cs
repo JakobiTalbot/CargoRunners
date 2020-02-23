@@ -46,6 +46,7 @@ public class Spaceship : MonoBehaviour
 
     public IEnumerator FlyToPlanet(Planet targetPlanet)
     {
+        // TODO: ensure ship doesn't fly through other planets (steering behaviour)
         m_bIsFlying = true;
 
         float turnLerp = 0f;
@@ -53,7 +54,7 @@ public class Spaceship : MonoBehaviour
 
         float lastYaw = m_transform.rotation.y;
 
-        while (Vector3.Distance(m_transform.position, targetPlanet.transform.position) > targetPlanet.transform.localScale.x + m_transform.localScale.z)
+        while (Vector3.Distance(m_transform.position, targetPlanet.transform.position) > (targetPlanet.transform.localScale.x + m_transform.localScale.z) * 0.6f)
         {
             Vector3 dir = (targetPlanet.transform.position - m_transform.position).normalized;
             Quaternion newRot = new Quaternion();

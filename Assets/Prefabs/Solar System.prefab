@@ -52,12 +52,13 @@ GameObject:
   - component: {fileID: 4765391935251296413}
   - component: {fileID: 9204213991322900570}
   - component: {fileID: 4584199225825114462}
+  - component: {fileID: 2176324046995772911}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 40
   m_IsActive: 1
 --- !u!4 &9061757501170911900
 Transform:
@@ -133,6 +134,67 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!108 &2176324046995772911
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7944860619799460994}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 1, g: 1, b: 0.5801887, a: 1}
+  m_Intensity: 1
+  m_Range: 1000
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1001 &555618618634164681
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -144,6 +206,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Venus
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
@@ -255,6 +327,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Uranus
       objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -364,6 +446,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mars
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
@@ -475,6 +567,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Earth
       objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -584,6 +686,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Neptune
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
@@ -695,6 +807,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mercury
       objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -804,6 +926,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pluto
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
@@ -915,6 +1047,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jupiter
       objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1024,6 +1166,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Saturn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936852, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}

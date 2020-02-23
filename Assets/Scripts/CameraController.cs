@@ -24,11 +24,12 @@ public class CameraController : MonoBehaviour
     private Camera m_camera;
 
 
-    private Vector3 m_lastPos;
+    private Vector3 m_lastPanPos;
     private Vector3 m_panDiff;
     private Vector3 m_zoomDiff;
     private Vector3 m_positionBeforeFocus;
     private Quaternion m_rotationBeforeFocus;
+    private float m_lastPinchDifference;
     private bool m_bCanMoveCamera = true;
 
     void Awake()
@@ -42,6 +43,8 @@ public class CameraController : MonoBehaviour
         #if UNITY_EDITOR
             MouseInput();
         #endif
+
+        TouchInput();
 
         m_transform.position += m_panDiff;
         if (!(m_transform.position.y + m_zoomDiff.y < m_minCameraYZoom)
@@ -57,13 +60,59 @@ public class CameraController : MonoBehaviour
         m_zoomDiff *= 0.9f;
     }
 
+    private void TouchInput()
+    {
+        if (m_bCanMoveCamera)
+        {
+            // pinch zoom
+            if (Input.touchCount >= 2)
+            {
+                Touch t1 = Input.GetTouch(0);
+                Touch t2 = Input.GetTouch(1);
+
+                if (t2.phase == TouchPhase.Began)
+                {
+                    m_lastPinchDifference = Vector3.Distance(t1.position, t2.position);
+                }
+                else if (t1.phase == TouchPhase.Moved || t2.phase == TouchPhase.Moved)
+                {
+                    float dist = Vector3.Distance(t1.position, t2.position);
+                    m_zoomDiff += m_transform.forward * (Vector3.Distance(t1.position, t2.position) - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime;
+
+                    m_lastPinchDifference = dist;
+                }
+            }
+            else if (Input.touchCount == 1)
+            {
+                Touch t1 = Input.GetTouch(0);
+
+                switch (t1.phase)
+                {
+                    case TouchPhase.Began:
+                    {
+                            m_lastPanPos = t1.position;
+                            m_zoomDiff = Vector3.zero;
+                            break;
+                    }
+                    case TouchPhase.Moved:
+                    {
+                            m_panDiff = new Vector3(m_lastPanPos.x - t1.position.x, 0, m_lastPanPos.y - t1.position.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
+
+                            m_lastPanPos = t1.position;
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
     private void MouseInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
             if (m_bCanMoveCamera)
             {
-                m_lastPos = Input.mousePosition;
+                m_lastPanPos = Input.mousePosition;
                 m_zoomDiff = Vector3.zero;
 
                 RaycastHit hit;
@@ -87,8 +136,8 @@ public class CameraController : MonoBehaviour
         {
             if (m_bCanMoveCamera)
             {
-                m_panDiff = new Vector3(m_lastPos.x - Input.mousePosition.x, 0, m_lastPos.y - Input.mousePosition.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
-                m_lastPos = Input.mousePosition;
+                m_panDiff = new Vector3(m_lastPanPos.x - Input.mousePosition.x, 0, m_lastPanPos.y - Input.mousePosition.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
+                m_lastPanPos = Input.mousePosition;
             }
         }
 
