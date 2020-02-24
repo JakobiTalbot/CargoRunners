@@ -31,6 +31,7 @@ public class CameraController : MonoBehaviour
     private Quaternion m_rotationBeforeFocus;
     private float m_lastPinchDifference;
     private bool m_bCanMoveCamera = true;
+    private int m_panTouchID;
 
     void Awake()
     {
@@ -90,15 +91,22 @@ public class CameraController : MonoBehaviour
                 {
                     case TouchPhase.Began:
                     {
+                            m_panTouchID = t1.fingerId;
                             m_lastPanPos = t1.position;
+
+                            // stop zooming
                             m_zoomDiff = Vector3.zero;
+
                             break;
                     }
                     case TouchPhase.Moved:
                     {
-                            m_panDiff = new Vector3(m_lastPanPos.x - t1.position.x, 0, m_lastPanPos.y - t1.position.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
+                            if (t1.fingerId != m_panTouchID)
+                                break;
 
+                            m_panDiff = new Vector3(m_lastPanPos.x - t1.position.x, 0, m_lastPanPos.y - t1.position.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
                             m_lastPanPos = t1.position;
+
                             break;
                     }
                 }
