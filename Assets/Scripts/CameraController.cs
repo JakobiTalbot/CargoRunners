@@ -77,7 +77,7 @@ public class CameraController : MonoBehaviour
                 else if (t1.phase == TouchPhase.Moved || t2.phase == TouchPhase.Moved)
                 {
                     float dist = Vector3.Distance(t1.position, t2.position);
-                    m_zoomDiff += m_transform.forward * (Vector3.Distance(t1.position, t2.position) - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime;
+                    m_zoomDiff = m_transform.forward * (Vector3.Distance(t1.position, t2.position) - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime;
 
                     m_lastPinchDifference = dist;
                 }
