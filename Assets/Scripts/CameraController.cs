@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField]
-    private float m_secondsForLerpToPlanetFocus = 1f;
+    public float m_secondsForLerpToPlanetFocus = 1f;
 
     [Header("Pan")]
     [SerializeField]
@@ -15,44 +14,56 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float m_zoomSpeedCoefficient = 1f;
     [SerializeField]
-    private float m_minCameraYZoom = 50f;
+    private float m_minCameraZoomFOV = 10f;
     [SerializeField]
-    private float m_maxCameraYZoom = 500f;
+    private float m_maxCameraZoomFOV = 90f;
+
+    [Header("Touch")]
+    [SerializeField]
+    private float m_touchDistanceThreshold = 5f;
+
+    [Header("UI")]
+    [SerializeField]
+    private GameObject m_planetOverlayCanvas;
 
 
     private Transform m_transform;
     private Camera m_camera;
 
 
-    private Vector3 m_lastPanPos;
+    private Vector3 m_touchStartPos;
     private Vector3 m_panDiff;
-    private Vector3 m_zoomDiff;
+    private float m_zoomDiff;
     private Vector3 m_positionBeforeFocus;
     private Quaternion m_rotationBeforeFocus;
     private float m_lastPinchDifference;
     private bool m_bCanMoveCamera = true;
     private int m_panTouchID;
+    private Planet m_planetToFocus;
+
+    public static CameraController instance;
 
     void Awake()
     {
         m_transform = transform;
         m_camera = Camera.main;
+        if (!instance)
+            instance = this;
     }
 
     void Update()
     {
-        #if UNITY_EDITOR
-            MouseInput();
-        #endif
-
         TouchInput();
 
         m_transform.position += m_panDiff;
-        if (!(m_transform.position.y + m_zoomDiff.y < m_minCameraYZoom)
-            && !(m_transform.position.y + m_zoomDiff.y > m_maxCameraYZoom))
+
+        // TODO: math to minus from zoom diff to reach perfect FOV min/max val
+        if ((m_camera.fieldOfView + m_zoomDiff) <= m_maxCameraZoomFOV
+            && (m_camera.fieldOfView + m_zoomDiff >= m_minCameraZoomFOV))
         {
-            m_transform.position += m_zoomDiff;
+            m_camera.fieldOfView += m_zoomDiff;
         }
+
     }
 
     private void FixedUpdate()
@@ -78,7 +89,7 @@ public class CameraController : MonoBehaviour
                 else if (t1.phase == TouchPhase.Moved || t2.phase == TouchPhase.Moved)
                 {
                     float dist = Vector3.Distance(t1.position, t2.position);
-                    m_zoomDiff = m_transform.forward * (Vector3.Distance(t1.position, t2.position) - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime;
+                    m_zoomDiff = -((dist - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime);
 
                     m_lastPinchDifference = dist;
                 }
@@ -92,10 +103,10 @@ public class CameraController : MonoBehaviour
                     case TouchPhase.Began:
                     {
                             m_panTouchID = t1.fingerId;
-                            m_lastPanPos = t1.position;
+                            m_touchStartPos = t1.position;
 
                             // stop zooming
-                            m_zoomDiff = Vector3.zero;
+                            m_zoomDiff = 0f;
 
                             break;
                     }
@@ -104,67 +115,53 @@ public class CameraController : MonoBehaviour
                             if (t1.fingerId != m_panTouchID)
                                 break;
 
-                            m_panDiff = new Vector3(m_lastPanPos.x - t1.position.x, 0, m_lastPanPos.y - t1.position.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
-                            m_lastPanPos = t1.position;
+                            m_panDiff = new Vector3(t1.deltaPosition.x, 0, t1.deltaPosition.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
 
                             break;
                     }
-                }
-            }
-        }
-    }
-
-    private void MouseInput()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (m_bCanMoveCamera)
-            {
-                m_lastPanPos = Input.mousePosition;
-                m_zoomDiff = Vector3.zero;
-
-                RaycastHit hit;
-                if (Physics.Raycast(m_camera.ScreenPointToRay(Input.mousePosition), out hit))
-                {
-                    Planet p;
-                    if (p = hit.collider.GetComponent<Planet>())
+                    case TouchPhase.Ended:
                     {
-                        // store position and rotation to return to after leaving planet focus
-                        m_positionBeforeFocus = m_transform.position;
-                        m_rotationBeforeFocus = m_transform.rotation;
+                        if (t1.fingerId != m_panTouchID)
+                            break;
 
-                        DisableCameraMovement();
-                        Transform angle = p.GetFocusAngle();
-                        StartCoroutine(LerpCamera(angle.position, angle.rotation, m_secondsForLerpToPlanetFocus));
+                        if (Vector3.Distance(t1.position, m_touchStartPos) < m_touchDistanceThreshold)
+                        {
+                                // user has tapped
+                                ProcessTap(t1.position);
+                        }
+
+                        break;
                     }
                 }
             }
         }
-        else if (Input.GetMouseButton(0))
+    }
+
+    private void ProcessTap(Vector3 tapPos)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(m_camera.ScreenPointToRay(tapPos), out hit))
         {
-            if (m_bCanMoveCamera)
+            if (hit.collider.GetComponent<Planet>())
             {
-                m_panDiff = new Vector3(m_lastPanPos.x - Input.mousePosition.x, 0, m_lastPanPos.y - Input.mousePosition.y) * m_transform.position.y * m_panSpeedCoefficient * Time.deltaTime;
-                m_lastPanPos = Input.mousePosition;
+                m_planetToFocus = hit.collider.GetComponent<Planet>();
+                Transform t = m_planetToFocus.GetFocusAngle();
+                StartCoroutine(LerpCamera(t.position, t.rotation, m_secondsForLerpToPlanetFocus));
+                Invoke("FocusPlanet", m_secondsForLerpToPlanetFocus);
             }
-        }
-
-        // zoom
-        if (m_bCanMoveCamera)
-        {
-            m_zoomDiff += m_transform.forward * Input.mouseScrollDelta.y * m_zoomSpeedCoefficient * Time.deltaTime;
-        }
-
-        // return to original position from planet focus
-        if (!m_bCanMoveCamera && Input.GetKeyDown(KeyCode.Escape))
-        {
-            StartCoroutine(LerpCamera(m_positionBeforeFocus, m_rotationBeforeFocus, m_secondsForLerpToPlanetFocus));
-            Invoke("EnableCameraMovement", m_secondsForLerpToPlanetFocus);
         }
     }
 
-    private IEnumerator LerpCamera(Vector3 targetPos, Quaternion targetRot, float seconds)
+    /// <summary>
+    /// Function to lerp camera from position when coroutine is started to designated position and rotation in seconds amount of time.
+    /// Disables camera movement on start.
+    /// </summary>
+    /// <param name="targetPos">Target position to lerp to.</param>
+    /// <param name="targetRot">Target rotation to lerp to.</param>
+    /// <param name="seconds">Seconds to take lerping to the target.</param>
+    public IEnumerator LerpCamera(Vector3 targetPos, Quaternion targetRot, float seconds)
     {
+        m_bCanMoveCamera = false;
         float lerp = 0f;
         Vector3 startPos = m_transform.position;
         Quaternion startRot = m_transform.rotation;
@@ -183,11 +180,25 @@ public class CameraController : MonoBehaviour
         m_transform.rotation = targetRot;
     }
 
+    private void FocusPlanet()
+    {
+        m_planetOverlayCanvas.SetActive(true);
+    }
+
+    /// <summary>
+    /// Hides planet overlay and lerps camera back to position before focusing on planet.
+    /// </summary>
+    public void UnfocusPlanet()
+    {
+        m_planetOverlayCanvas.SetActive(false);
+        StartCoroutine(LerpCamera(m_positionBeforeFocus, m_rotationBeforeFocus, m_secondsForLerpToPlanetFocus));
+    }
+
     public void DisableCameraMovement()
     {
         m_bCanMoveCamera = false;
         m_panDiff = Vector3.zero;
-        m_zoomDiff = Vector3.zero;
+        m_zoomDiff = 0f;
     }
 
     public void EnableCameraMovement()

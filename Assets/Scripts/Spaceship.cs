@@ -10,12 +10,15 @@ public class Spaceship : MonoBehaviour
     private float m_turnSpeed = 1f;
     [SerializeField]
     private float m_yawToRollCoefficient = 1f;
+    [SerializeField]
+    private float m_tapThreshold = 3f;
 
     private Coroutine m_currentFlight;
 
     private Transform m_transform;
     private Camera m_camera;
 
+    private Vector3 m_tapStartPos;
     private bool m_bIsFlying = false;
 
     private void Awake()
@@ -26,22 +29,7 @@ public class Spaceship : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(m_camera.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                Planet p;
-                if (p = hit.collider.GetComponent<Planet>())
-                {
-                    // stop current flight (if exists) before starting new one
-                    if (m_bIsFlying)
-                        StopCoroutine(m_currentFlight);
-                    // start flight
-                    m_currentFlight = StartCoroutine(FlyToPlanet(p));
-                }
-            }
-        }
+
     }
 
     public IEnumerator FlyToPlanet(Planet targetPlanet)
