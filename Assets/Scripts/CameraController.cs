@@ -22,14 +22,8 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float m_touchDistanceThreshold = 5f;
 
-    [Header("UI")]
-    [SerializeField]
-    private GameObject m_planetOverlayCanvas;
-
-
     private Transform m_transform;
     private Camera m_camera;
-
 
     private Vector3 m_touchStartPos;
     private Vector3 m_panDiff;
@@ -39,7 +33,6 @@ public class CameraController : MonoBehaviour
     private float m_lastPinchDifference;
     private bool m_bCanMoveCamera = true;
     private int m_panTouchID;
-    private Planet m_planetToFocus;
 
     public static CameraController instance;
 
@@ -55,7 +48,7 @@ public class CameraController : MonoBehaviour
     {
         TouchInput();
 
-        m_transform.position += m_panDiff;
+        m_transform.position -= m_panDiff;
 
         // TODO: math to minus from zoom diff to reach perfect FOV min/max val
         if ((m_camera.fieldOfView + m_zoomDiff) <= m_maxCameraZoomFOV
@@ -89,7 +82,7 @@ public class CameraController : MonoBehaviour
                 else if (t1.phase == TouchPhase.Moved || t2.phase == TouchPhase.Moved)
                 {
                     float dist = Vector3.Distance(t1.position, t2.position);
-                    m_zoomDiff = -((dist - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime);
+                    m_zoomDiff -= ((dist - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime);
 
                     m_lastPinchDifference = dist;
                 }
@@ -144,10 +137,7 @@ public class CameraController : MonoBehaviour
         {
             if (hit.collider.GetComponent<Planet>())
             {
-                m_planetToFocus = hit.collider.GetComponent<Planet>();
-                Transform t = m_planetToFocus.GetFocusAngle();
-                StartCoroutine(LerpCamera(t.position, t.rotation, m_secondsForLerpToPlanetFocus));
-                Invoke("FocusPlanet", m_secondsForLerpToPlanetFocus);
+                StartCoroutine(FocusPlanet(hit.collider.GetComponent<Planet>(), m_secondsForLerpToPlanetFocus));
             }
         }
     }
@@ -180,9 +170,20 @@ public class CameraController : MonoBehaviour
         m_transform.rotation = targetRot;
     }
 
-    private void FocusPlanet()
+    private IEnumerator FocusPlanet(Planet planet, float secondsUntilEnablingUI)
     {
-        m_planetOverlayCanvas.SetActive(true);
+        m_positionBeforeFocus = m_transform.position;
+        m_rotationBeforeFocus = m_transform.rotation;
+
+        Invoke("FocusPlanet", m_secondsForLerpToPlanetFocus);
+
+        Transform t = planet.GetFocusAngle();
+        StartCoroutine(LerpCamera(t.position, t.rotation, m_secondsForLerpToPlanetFocus));
+
+        // wait for seconds until enabling UI
+        yield return new WaitForSeconds(secondsUntilEnablingUI);
+
+        UIManager.instance.EnablePlanetOverlay(planet);
     }
 
     /// <summary>
@@ -190,8 +191,9 @@ public class CameraController : MonoBehaviour
     /// </summary>
     public void UnfocusPlanet()
     {
-        m_planetOverlayCanvas.SetActive(false);
+        UIManager.instance.DisablePlanetOverlay();
         StartCoroutine(LerpCamera(m_positionBeforeFocus, m_rotationBeforeFocus, m_secondsForLerpToPlanetFocus));
+        Invoke("EnableCameraMovement", m_secondsForLerpToPlanetFocus);
     }
 
     public void DisableCameraMovement()
