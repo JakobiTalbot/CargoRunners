@@ -14,9 +14,9 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float m_zoomSpeedCoefficient = 1f;
     [SerializeField]
-    private float m_minCameraZoomFOV = 10f;
+    private float m_minCameraYZoom = 50f;
     [SerializeField]
-    private float m_maxCameraZoomFOV = 90f;
+    private float m_maxCameraYZoom = 500f;
 
     [Header("Touch")]
     [SerializeField]
@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
 
     private Vector3 m_touchStartPos;
     private Vector3 m_panDiff;
-    private float m_zoomDiff;
+    private Vector3 m_zoomDiff;
     private Vector3 m_positionBeforeFocus;
     private Quaternion m_rotationBeforeFocus;
     private float m_lastPinchDifference;
@@ -51,12 +51,11 @@ public class CameraController : MonoBehaviour
         m_transform.position -= m_panDiff;
 
         // TODO: math to minus from zoom diff to reach perfect FOV min/max val
-        if ((m_camera.fieldOfView + m_zoomDiff) <= m_maxCameraZoomFOV
-            && (m_camera.fieldOfView + m_zoomDiff >= m_minCameraZoomFOV))
+        if (!(m_transform.position.y + m_zoomDiff.y < m_minCameraYZoom)
+            && !(m_transform.position.y + m_zoomDiff.y > m_maxCameraYZoom))
         {
-            m_camera.fieldOfView += m_zoomDiff;
+            m_transform.position += m_zoomDiff;
         }
-
     }
 
     private void FixedUpdate()
@@ -82,7 +81,7 @@ public class CameraController : MonoBehaviour
                 else if (t1.phase == TouchPhase.Moved || t2.phase == TouchPhase.Moved)
                 {
                     float dist = Vector3.Distance(t1.position, t2.position);
-                    m_zoomDiff -= ((dist - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime);
+                    m_zoomDiff += m_transform.forward * (Vector3.Distance(t1.position, t2.position) - m_lastPinchDifference) * m_zoomSpeedCoefficient * Time.deltaTime;
 
                     m_lastPinchDifference = dist;
                 }
@@ -99,7 +98,7 @@ public class CameraController : MonoBehaviour
                             m_touchStartPos = t1.position;
 
                             // stop zooming
-                            m_zoomDiff = 0f;
+                            m_zoomDiff = Vector3.zero;
 
                             break;
                     }
@@ -200,7 +199,7 @@ public class CameraController : MonoBehaviour
     {
         m_bCanMoveCamera = false;
         m_panDiff = Vector3.zero;
-        m_zoomDiff = 0f;
+        m_zoomDiff = Vector3.zero;
     }
 
     public void EnableCameraMovement()

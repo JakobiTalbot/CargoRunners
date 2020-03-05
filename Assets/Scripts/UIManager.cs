@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,19 +10,18 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject m_planetOverlayCanvasObject;
 
+    [SerializeField]
+    private TextMeshProUGUI m_planetNameText;
+
     void Start()
     {
         if (!instance)
             instance = this;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void EnablePlanetOverlay(Planet planet)
     {
+        m_planetNameText.text = planet.GetName();
         m_planetOverlayCanvasObject.SetActive(true);
     }
 

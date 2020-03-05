@@ -202,6 +202,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Venus
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -322,6 +327,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Uranus
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -442,6 +452,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Mars
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -562,6 +577,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Earth
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -682,6 +702,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Neptune
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -802,6 +827,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Mercury
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -922,6 +952,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Pluto
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -1042,6 +1077,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Jupiter
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
@@ -1162,6 +1202,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2176324046928914487}
     m_Modifications:
+    - target: {fileID: 978640297999256425, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
+        type: 3}
+      propertyPath: m_planetName
+      value: Saturn
+      objectReference: {fileID: 0}
     - target: {fileID: 7787110968791936841, guid: fb5e5bbabea38dc4ba9694d5b5aa3731,
         type: 3}
       propertyPath: m_Name
