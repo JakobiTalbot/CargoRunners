@@ -134,9 +134,10 @@ public class CameraController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(m_camera.ScreenPointToRay(tapPos), out hit))
         {
-            if (hit.collider.GetComponent<Planet>())
+            Tappable t;
+            if (t = hit.collider.GetComponent<Tappable>())
             {
-                StartCoroutine(FocusPlanet(hit.collider.GetComponent<Planet>(), m_secondsForLerpToPlanetFocus));
+                t.OnTap();
             }
         }
     }
@@ -169,7 +170,13 @@ public class CameraController : MonoBehaviour
         m_transform.rotation = targetRot;
     }
 
-    private IEnumerator FocusPlanet(Planet planet, float secondsUntilEnablingUI)
+    /// <summary>
+    /// Focuses on specified planet and enables planet overlay UI.
+    /// </summary>
+    /// <param name="planet">The planet to focus on.</param>
+    /// <param name="secondsUntilEnablingUI">The seconds until enabling planet overlay UI.</param>
+    /// <returns></returns>
+    public IEnumerator FocusPlanet(Planet planet, float secondsUntilEnablingUI)
     {
         m_positionBeforeFocus = m_transform.position;
         m_rotationBeforeFocus = m_transform.rotation;

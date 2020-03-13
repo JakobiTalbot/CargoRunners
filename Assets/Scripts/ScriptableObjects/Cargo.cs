@@ -11,9 +11,12 @@ public class Cargo : ScriptableObject
     [SerializeField]
     private Texture m_cargoIcon;
     [SerializeField]
-    private int m_baseValue;
+    private int m_baseBuyValue;
+    [SerializeField]
+    private int m_baseSellValue;
 
     public string GetName() => m_cargoName;
     public Texture GetIcon() => m_cargoIcon;
-    public int GetValue() => m_baseValue;
+    public int GetBuyValue() => m_baseBuyValue;
+    public int GetSellValue() => m_baseSellValue;
 }
